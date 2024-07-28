@@ -1,0 +1,60 @@
+[gd_scene load_steps=9 format=3 uid="uid://d3q0txitfo6bx"]
+
+[ext_resource type="Texture2D" uid="uid://yyrenbtn1lsl" path="res://assets/Game Objects/background-day.png" id="1_ij837"]
+[ext_resource type="Script" path="res://script/main.gd" id="1_jtivn"]
+[ext_resource type="PackedScene" uid="uid://dsfvylsjpcn5o" path="res://scene/pipe.tscn" id="2_ni5qq"]
+[ext_resource type="PackedScene" uid="uid://c8otxa31x82je" path="res://scene/bird.tscn" id="3_6yl1n"]
+[ext_resource type="PackedScene" uid="uid://c5n0qfrfbn14m" path="res://scene/ground.tscn" id="4_rvyl2"]
+[ext_resource type="FontFile" uid="uid://cpwlrpxdgimyb" path="res://fonts/press-start-2p.regular.ttf" id="6_mqmet"]
+[ext_resource type="PackedScene" uid="uid://cjnpnewpwlio4" path="res://scene/game_over.tscn" id="6_stn3a"]
+[ext_resource type="Texture2D" uid="uid://c7g0xvmpxpqwj" path="res://assets/UI/message.png" id="8_oqiqr"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_jtivn")
+pipe_scene = ExtResource("2_ni5qq")
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(144, 256)
+texture = ExtResource("1_ij837")
+
+[node name="Bird" parent="." instance=ExtResource("3_6yl1n")]
+
+[node name="Ground" parent="." instance=ExtResource("4_rvyl2")]
+z_index = 1
+
+[node name="PipeTimer" type="Timer" parent="."]
+wait_time = 1.5
+
+[node name="ScoreLabel" type="Label" parent="."]
+z_index = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -52.5
+offset_top = 8.0
+offset_right = 52.5
+offset_bottom = 31.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("6_mqmet")
+theme_override_font_sizes/font_size = 15
+text = "SCORE:0"
+
+[node name="GameOver" parent="." instance=ExtResource("6_stn3a")]
+
+[node name="StartMessage" type="TextureRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -92.0
+offset_top = -133.5
+offset_right = 92.0
+offset_bottom = 133.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_oqiqr")
+
+[connection signal="hit" from="Ground" to="." method="_on_ground_hit"]
+[connection signal="timeout" from="PipeTimer" to="." method="_on_pipe_timer_timeout"]
+[connection signal="restart" from="GameOver" to="." method="_on_game_over_restart"]
